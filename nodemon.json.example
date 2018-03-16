@@ -1,5 +1,5 @@
 {
     "env": {
-        "MONGO_ATLAS_PASSWORD": "your_mongo_password"
+        "URI_STRING": "mongodb://<YOUR_USERNAME>:<YOUR_PASSWORD>@ahtefe-shard-00-00-2vogq.mongodb.net:27017,ahtefe-shard-00-01-2vogq.mongodb.net:27017,ahtefe-shard-00-02-2vogq.mongodb.net:27017/test?ssl=true&replicaSet=ahtefe-shard-0&authSource=admin"        
     }
 }

@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 const routes = require('./api/routes')
 
 //mongo
-mongoose.connect('mongodb://andraeinstein:' + process.env.MONGO_ATLAS_PASSWORD + '@ahtefe-shard-00-00-2vogq.mongodb.net:27017,ahtefe-shard-00-01-2vogq.mongodb.net:27017,ahtefe-shard-00-02-2vogq.mongodb.net:27017/test?ssl=true&replicaSet=ahtefe-shard-0&authSource=admin')
+mongoose.connect(process.env.URI_STRING)
 mongoose.Promise = global.Promise
 
 //plugins
