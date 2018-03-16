@@ -1,5 +1,5 @@
 # mc-express-mongo-boilerplate
-Model-Controller Boilerplate with ExpressJS and MongoDB
+Model-Controller Boilerplate with ExpressJS and MongoDB for building REST API
 
 This is Express-MongoDB Boilerplate with Model-Controller system.
 Database using MongoDB Atlas
