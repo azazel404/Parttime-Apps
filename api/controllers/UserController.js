@@ -3,22 +3,18 @@ const User = require('../models/user')
 
 exports.index = (req, res, next) => {
     User.find()
-    .select('nama password').exec()
-    .then( docs => {
-        const response = {
-            count: docs.length,
-            users: docs
-        }
-        res.status(200).json(response)
+    .select('name password').exec()
+    .then( doc => {
+        res.status(200).json(doc)
     }).catch( err => {
-        res.status(500).json({message: 'data gak ketemu bro'})
+        res.status(500).json({message: 'user empty'})
     })
 }
 
 exports.store = (req, res, next) => {
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
-        nama: req.body.nama,
+        name: req.body.name,
         password: req.body.password
     })
     user.save().then( result => {
@@ -40,7 +36,7 @@ exports.show = (req, res, next) => {
 
 exports.update = (req, res, next) => {
     User.update({ _id: req.params.id }, { $set: {
-        nama: req.body.nama,
+        name: req.body.name,
         password: req.body.password
     } }).exec().then( result => {
         res.status(200).json(result)
