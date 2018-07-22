@@ -1,19 +1,24 @@
-exports.index = (req, res, next) => {
-  res.send(req.body)
+const passport = require('passport');
+
+
+exports.authFacebook = (req, res, next) => {
+  passport.authenticate('facebook', {
+    scope: ['email'] });
+   
 }
 
-exports.store = (req, res, next) => {
-  res.send(req.body)
+exports.authFacebookCallback = (req, res, next) => {
+  passport.authenticate('facebook', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+  })
 }
 
-exports.show = (req, res, next) => {
-
+exports.currentUser = (req, res, next) => {
+  res.send(req.user);
 }
 
-exports.update = (req, res, next) => {
-
-}
-
-exports.delete = (req, res, next) => {
-
+exports.logout = (req, res, next) => {
+  req.logout();
+  res.redirect('/');
 }

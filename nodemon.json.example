@@ -1,5 +1,0 @@
-{
-    "env": {
-        "URI_STRING": "mongodb://<USERNAME>:<PASSWORD>@<URL>:<PORT>/<DATABASE_NAME>?authSource=admin"        
-    }
-}
