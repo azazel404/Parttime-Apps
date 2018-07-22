@@ -1,4 +1,4 @@
-const UserSchema = require("./Users");
+// const UserSchema = require("./Users");
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -15,7 +15,7 @@ const jobSchema = new Schema({
     salary: { type: Number, required: true },
     location: { type: String, required: true },
     status: { type: Boolean },
-    employeer: [UserSchema]
+    // employeer: [UserSchema]
     
 
 

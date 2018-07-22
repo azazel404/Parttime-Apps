@@ -6,7 +6,13 @@ exports.index = async (req, res, next) => {
     res.send(jobs);
 }
 
-exports.store = async  (req, res, next) => {
+exports.show = async(req, res, next) => {
+    const jobs = await Jobs.findOne({
+        _id: req.params.id
+    });
+    res.send(jobs);
+}
+exports.store = async (req, res, next) => {
     const jobs = new Jobs({
         _id: new mongoose.Types.ObjectId(),
         day: req.body.day,
@@ -18,21 +24,15 @@ exports.store = async  (req, res, next) => {
         description: req.body.description,
         salary: req.body.salary,
         location: req.body.location,
-        status: req.body.status,
-        employeer : req.user
+        status: req.body.status
     });
     try {
         await jobs.save();
-        res.send(freetimes);
+        res.send(jobs);
     } catch (err) {
         res.send(400, err);
     }
 }
-
-exports.show = async(req, res, next) => {
-
-}
-
 exports.update = async (req, res, next) => {
     const id = req.params.id;
     const UpdateJob = {};

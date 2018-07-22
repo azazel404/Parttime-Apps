@@ -1,7 +1,7 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
-let User = require('../models/Users');
-
+const User = require('../models/Users');
+const cookie = require("../services/cookie");
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
@@ -17,9 +17,9 @@ passport.deserializeUser((id, done) => {
 passport.use(
     new FacebookStrategy(
         {
-            callbackURL: '/auth/google/callback',
-            clientID: keys.googleClientID,
-            clientSecret: keys.googleClientSecret,
+            callbackURL: '/auth/facebook/callback',
+            clientID: cookie.facebokClientID,
+            clientSecret: cookie.facebokClientSecret,
             proxy: true
         },
         async (accessToken, refreshToken, profile, done) => {
