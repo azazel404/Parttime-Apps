@@ -1,4 +1,6 @@
+const mongoose = require('mongoose');
 const passport = require('passport');
+let User = require('../models/Users');
 
 
 exports.authFacebook = (req, res, next) => {

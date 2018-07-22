@@ -8,7 +8,7 @@ const freetimeSchema = new Schema({
     timestart: { type: String, required: true },
     timeend: { type: String, required: true },
     status: { type: Boolean},
-    partimerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true },
+    // partimerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true },
 
 })
   

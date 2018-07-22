@@ -1,17 +1,15 @@
+const mongoose = require('mongoose');
 let Jobs = require('../models/Jobs');
 
 
-exports.index = async (req, res, next) => {
-    const jobs = await Jobs.find({ partimerId: req.user.id });
-    res.send(jobs);
+exports.index =  (req, res, next) => {
+    Jobs.find().exec()
+        .then((result) => {
+            res.status(200).json({ message: "successfully get", data: result });
+        })
+        .catch((err) => res.status(404).json({ message: "not found", data: next }));
 }
 
-exports.show = async(req, res, next) => {
-    const jobs = await Jobs.findOne({
-        _id: req.params.id
-    });
-    res.send(jobs);
-}
 exports.store = async (req, res, next) => {
     const jobs = new Jobs({
         _id: new mongoose.Types.ObjectId(),
@@ -28,35 +26,39 @@ exports.store = async (req, res, next) => {
     });
     try {
         await jobs.save();
-        res.send(jobs);
+        res.status(200).json({ message: "successfully create", data: jobs });
     } catch (err) {
         res.send(400, err);
     }
 }
+
+exports.show = (req, res, next) => {
+    Jobs.findById({ "_id": req.params.id }, (err, result) => {
+        if (err) return res.send(err);
+        res.status(200).json({ message: "successfully spesifik", data: result });
+    })
+}
+
 exports.update = async (req, res, next) => {
-    const id = req.params.id;
-    const UpdateJob = {};
-    for (const JobUpdate of req.body) {
-        UpdateJob[JobUpdate.propNameFreetime] = JobUpdate.value;
-    }
-    const jobs = await Jobs.update({ _id: id }, { $set: update_product })
-    try {
-        jobs.exec().then((result) => {
-            res.status(200).json({ sukses: "sukses update", data: result });
-        }).catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
+    Jobs.findByIdAndUpdate({ _id: req.params.id }, req.body).then(function () {
+        Jobs.findOne({ _id: req.params.id }).then(function (result) {
+            res.status(200).json({ message: "successfully update", data: result });
         });
-    } catch (err) {
-        throw err;
-    }
+    }).catch(next);
 }
 
 exports.delete = async (req, res, next) => {
-    const jobs = await Jobs.remove({
-        _id: req.params.id
-    });
-    res.send(jobs);
+    const id = req.params.id;
+    Jobs.remove({ _id: id })
+        .exec()
+        .then(result => {
+            res.status(200).json({ sukses: "sukses delete" });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(404).json({
+                error: err,
+                data: next
+            });
+        });
 }

@@ -11,10 +11,10 @@ const cookie = require("./services/cookie");
 
 //import routes
 const routes = require('./routes')
-
+mongoose.Promise = global.Promise;
 //plugins
 app.use(morgan('dev'))
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.use(cors())
 app.use(passport.initialize());

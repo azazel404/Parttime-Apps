@@ -1,17 +1,13 @@
+const mongoose = require('mongoose');
 let Freetime = require('../models/Freetimes');
 
 
-exports.index = async (req, res, next) => {
-    const freetimes = await Freetime.find({ partimerId: req.user.id });
-    freetimes.exec()
+exports.index =  (req, res, next) => {
+    Freetime.find().exec()
         .then((result) => {
-            res.status(200).json({ sukses: "sukses ", data: result });
-        }).catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
+            res.status(200).json({ message: "successfully get", data: result });
+        })
+        .catch((err) => res.status(404).json({ message: "not found", data: next }) );
 }
 
 exports.store = async (req, res, next) => {
@@ -21,65 +17,43 @@ exports.store = async (req, res, next) => {
         timestart: req.body.timestart,
         timeend: req.body.timeend,
         status: req.body.status,
-        partimerId: req.user.id
+        
     });
     try {
         await freetimes.save();
-        res.send(freetimes);
+        res.status(200).json({ message: "successfully create", data: freetimes });
     } catch (err) {
-        res.send(400, err);
+        res.status(404).json({ message: "not found", data: next })
     }
 }
 
-exports.show = async (req, res, next) => {
-    const freetimes = await Freetime.findOne({
-        partimerId: req.user.id,
-        _id: req.params.id
-    });
-    freetimes.exec()
-        .then((result) => {
-            res.status(200).json({ sukses: "sukses show", data: result });
-        }).catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
+exports.show =  (req, res, next) => {
+    Freetime.findById({ "_id": req.params.id }, (err, result) => {
+        if (err) return res.send(err);
+        res.status(200).json({ message: "successfully spesifik", data: result });
+    })
 }
 
-exports.update = async (req, res, next) => {
+exports.update =  (req, res, next) => {
+    Freetime.findByIdAndUpdate({ _id: req.params.id }, req.body).then(function () {
+        Freetime.findOne({ _id: req.params.id }).then(function (result) {
+            res.status(200).json({ message: "successfully update", data: result });
+        });
+    }).catch(next);
+}
+
+exports.delete =  (req, res, next) => {
     const id = req.params.id;
-    const UpdateFreetime = {};
-    for (const FreetimeUpdate of req.body) {
-        UpdateFreetime[FreetimeUpdate.propNameFreetime] = FreetimeUpdate.value;
-    }
-    const freetimes = await Freetime.update({ _id: id }, { $set: update_product })
-    try {
-        freetimes.exec().then((result) => {
-            res.status(200).json({ sukses: "sukses update", data: result });
-        }).catch(err => {
+    Freetime.remove({ _id: id })
+        .exec()
+        .then(result => {
+            res.status(200).json({ sukses: "sukses delete" });
+        })
+        .catch(err => {
             console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
-    } catch (err) {
-        throw err;
-    }
-}
-
-exports.delete = async (req, res, next) => {
-    const freetimes = await Freetime.remove({
-        partimerId: req.user.id,
-        _id: req.params.id
-    });
-    freetimes.exec()
-        .then((result) => {
-            res.status(200).json({ sukses: "sukses delete", data: result });
-        }).catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
+            res.status(404).json({
+                error: err,
+                data : next
             });
         });
 }
