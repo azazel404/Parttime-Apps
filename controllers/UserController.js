@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
 const passport = require('passport');
-let User = require('../models/Users');
-
+const User = require('../models/Users');
+require('../services/passport');
 
 exports.authFacebook = (req, res, next) => {
   passport.authenticate('facebook', {
@@ -17,7 +16,11 @@ exports.authFacebookCallback = (req, res, next) => {
 }
 
 exports.currentUser = (req, res, next) => {
-  res.send(req.user);
+  User.find().exec()
+    .then((result) => {
+      res.status(200).json({ message: "successfully get", data: result });
+    })
+    .catch((err) => res.status(404).json({ message: "not found", data: next }));
 }
 
 exports.logout = (req, res, next) => {

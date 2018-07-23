@@ -1,14 +1,12 @@
-const UserSchema = require("./Users");
-const JobSchema = require("./Jobs");
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 
 const hiredjobSchema = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    job: [JobSchema],
-    applicants: [UserSchema],
-    employer: [UserSchema]
+    job: { type: mongoose.Schema.Types.ObjectId, ref: 'Jobs', required: true },
+    applicants: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true },
+    employer: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true }
 
 })
 

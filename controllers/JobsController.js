@@ -1,46 +1,66 @@
 const mongoose = require('mongoose');
-let Jobs = require('../models/Jobs');
-
+const Jobs = require('../models/Jobs');
+const User = require('../models/Users');
 
 exports.index =  (req, res, next) => {
-    Jobs.find().exec()
+    Jobs.find()
+        .populate('employeerId')
+    .exec()
         .then((result) => {
             res.status(200).json({ message: "successfully get", data: result });
         })
         .catch((err) => res.status(404).json({ message: "not found", data: next }));
 }
 
-exports.store = async (req, res, next) => {
-    const jobs = new Jobs({
-        _id: new mongoose.Types.ObjectId(),
-        day: req.body.day,
-        timestart: req.body.timestart,
-        timeend: req.body.timeend,
-        startdate: req.body.startdate,
-        enddate: req.body.enddate,
-        position: req.body.position,
-        description: req.body.description,
-        salary: req.body.salary,
-        location: req.body.location,
-        status: req.body.status
-    });
-    try {
-        await jobs.save();
-        res.status(200).json({ message: "successfully create", data: jobs });
-    } catch (err) {
-        res.send(400, err);
-    }
+exports.store =  (req, res, next) => {
+
+    User.findById(req.body.employeerId)
+        .then(user => {
+            if (!user) {
+                return res.status(404).json({
+                    message: "user not found"
+                });
+            }
+            const jobs = new Jobs({
+                _id: new mongoose.Types.ObjectId(),
+                day: req.body.day,
+                timestart: req.body.timestart,
+                timeend: req.body.timeend,
+                startdate: req.body.startdate,
+                enddate: req.body.enddate,
+                position: req.body.position,
+                description: req.body.description,
+                salary: req.body.salary,
+                location: req.body.location,
+                status: req.body.status,
+                employeerId: req.body.employeerId
+            });
+            return jobs.save();
+        })
+        .then(result => {
+            res.status(200).json({ message: "successfully create", data: result });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+                data: next
+            });
+        });
+    
 }
 
 exports.show = (req, res, next) => {
-    Jobs.findById({ "_id": req.params.id }, (err, result) => {
+    const id = req.params.employeerId;
+    Jobs.findById(id, (err, result) => {
         if (err) return res.send(err);
         res.status(200).json({ message: "successfully spesifik", data: result });
     })
 }
 
 exports.update = async (req, res, next) => {
-    Jobs.findByIdAndUpdate({ _id: req.params.id }, req.body).then(function () {
+    const id = req.params.employeerId;
+    Jobs.findByIdAndUpdate(id, req.body).then(function () {
         Jobs.findOne({ _id: req.params.id }).then(function (result) {
             res.status(200).json({ message: "successfully update", data: result });
         });
@@ -48,7 +68,7 @@ exports.update = async (req, res, next) => {
 }
 
 exports.delete = async (req, res, next) => {
-    const id = req.params.id;
+    const id = req.params.employeerId;
     Jobs.remove({ _id: id })
         .exec()
         .then(result => {

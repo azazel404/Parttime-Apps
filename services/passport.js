@@ -1,7 +1,12 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
-const User = require('../models/Users');
-const cookie = require("../services/cookie");
+const mongoose = require('mongoose');
+require('../models/Users');
+const User = mongoose.model('Users');
+const cookie = require("../services/develop");
+
+
+
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
@@ -31,7 +36,9 @@ passport.use(
                 }
                 const user = await new User({
                     facebookId: profile.id,
-                    displayName: profile.displayName
+                    displayName: profile.name.givenName + " " + profile.name.familyName,
+                    picture: profile.picture,
+                    email : profile.email
                 }).save();
                 done(null, user);
             } catch (err) {

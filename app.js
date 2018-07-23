@@ -4,10 +4,12 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser');
 const cors = require('cors')
 const mongoose = require('mongoose');
-const config = require('./connection');
+const config = require('./services/connection');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
-const cookie = require("./services/cookie");
+const cookie = require("./services/develop");
+require('./services/passport');
+
 
 //import routes
 const routes = require('./routes')
