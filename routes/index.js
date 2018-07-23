@@ -31,7 +31,7 @@ router.route('/jobs/:employeerId').delete(JobsController.delete)
 
 
 router.route('/jobs/apply/:employeerId').post(HiredjobController.ShowApply)
-router.route('/jobs/apply/:employeerId').post(HiredjobController.AddApplyJob)
+router.route('/jobs/apply').post(HiredjobController.AddApplyJob)
 
 
 module.exports = router

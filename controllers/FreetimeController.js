@@ -45,10 +45,15 @@ exports.store = (req, res, next) => {
 
 exports.show = (req, res, next) => {
     const id = req.params.parttimerId;
-    Freetime.findById(id, (err, result) => {
-        if (err) return res.send(err);
-        res.status(200).json({ message: "successfully spesifik", data: result });
-    })
+    Freetime.findById(id)
+        .populate('parttimerId')
+        .exec()
+        .then(result => {
+            res.status(200).json({ message: "successfully show", data: result });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({ err: err });
+        })
 }
 
 exports.update = (req, res, next) => {
