@@ -1,12 +1,22 @@
 const mongoose = require('mongoose');
-const Hirejob = require('../models/Hirejobs');
+const Hirejob = require('../models/Hiredjobs');
 const Jobs = require('../models/Jobs');
 const User = require('../models/Users');
 
 
+// exports.test = (req, res, next) => {
+//     Hirejob.find()
+//         .populate("jobs").populate("employeer")
+//         .exec()
+//         .then((result) => {
+//             res.status(200).json({ message: "successfully get", data: result });
+//         })
+//         .catch((err) => res.status(404).json({ message: "not found" + err, data: next }));
+// }
+
 exports.ShowApply = (req, res, next) => {
-    Hirejob.find()
-        .populate("job", "applicants","employer")
+    Hirejob.findOne({"_id": req.params.id})
+        .populate("jobs").populate("employeer")
     .exec()
         .then((result) => {
             res.status(200).json({ message: "successfully get", data: result });
@@ -15,38 +25,25 @@ exports.ShowApply = (req, res, next) => {
 }
 
 exports.AddApplyJob = (req, res, next) => {
-    Jobs.findById(req.body.employeerId)
-        .then(user => {
-            if (!user) {
-                return res.status(404).json({
-                    message: "EmployeerId not found"
-                });
-            }
-        })
-    User.findById(req.body.parttimerId)
-        .then(user => {
-            if (!user) {
-                return res.status(404).json({
-                    message: "user not found"
-                });
-            }
-        })
-    const hirejob = new Hirejob({
+    if (!req.body.jobsId) {
+        return res.status(400).send({
+            message: "Data can not be empty"
+        });
+    }
+    const hirejobs = new Hirejob({
         _id: new mongoose.Types.ObjectId(),
-        job: req.body.employeerId,
-        applicants: req.body.parttimerId,
-        employer: req.body.parttimerId,
-    })
-    return hirejob.save()
-        .then(result => {
-            res.status(200).json({ message: "successfully create", data: result });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err,
-                data: next
+        jobs: req.body.jobsId,
+        applicants: req.body.applicants,
+        employeer: req.body.employeer,
+    });
+
+    hirejobs.save()
+        .then(data => {
+            res.status(200).json({ message: "successfully save", data: data });
+        }).catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while creating the data."
             });
         });
+};
 
-}

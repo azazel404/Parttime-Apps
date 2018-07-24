@@ -29,8 +29,8 @@ router.route('/jobs/:employeerId').get(JobsController.show)
 router.route('/jobs/:employeerId').put(JobsController.update)
 router.route('/jobs/:employeerId').delete(JobsController.delete)
 
-
-router.route('/jobs/apply/:employeerId').post(HiredjobController.ShowApply)
+// router.route('/hire').get(HiredjobController.test)
+router.route('/jobs/apply/:jobsId').post(HiredjobController.ShowApply)
 router.route('/jobs/apply').post(HiredjobController.AddApplyJob)
 
 
