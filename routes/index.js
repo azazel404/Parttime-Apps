@@ -11,11 +11,11 @@ const HiredjobController = require('../controllers/HiredjobController')
 
 
 
-router.route('/register').get(UserController.register)
+router.route('/register').post(UserController.register)
 router.route('/login').post(UserController.login)
 
 router.route('/users/update-password').post(auth,UserController.updatePassword)
-router.route('/users').get(auth,UserController.indexUser)
+router.route('/users').get(UserController.indexUser)
 router.route('/users/update').put(auth,UserController.updateUser)
 router.route('/users/logout').get(UserController.logout)
 

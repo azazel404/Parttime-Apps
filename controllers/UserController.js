@@ -8,43 +8,19 @@ const bcrypt = require("bcrypt");
 
 
 exports.register = (req, res, next) => {
-  User.find({ email: req.body.email })
-    .exec()
-    .then(user => {
-      if (user.length >= 1) {
-        return res.status(409).json({
-          message: "Mail exists"
-        });
-      } else {
-        bcrypt.hash(req.body.password, 10, (err, hash) => {
-          if (err) {
-            return res.status(500).json({
-              error: err
-            });
-          } else {
-            const user = new User({
-              firstname: req.body.firstname,
-              lastname: req.body.lastname,
-              email: req.body.email,
-              password: hash
-            });
-            user
-              .save()
-              .then(result => {
-                console.log(result);
-                res.status(201).json({
-                  message: "User created"
-                });
-              })
-              .catch(err => {
-                console.log(err);
-                res.status(500).json({
-                  error: err
-                });
-              });
-          }
-        });
-      }
+  var hashedPassword = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(5), null);
+  User.create({
+    email: req.body.email,
+    password: hashedPassword,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+  },
+    function (err, user) {
+      if (err) return res.status(500).send("There was a problem registering the user.")
+      var token = jwt.sign({ id: user._id }, process.env.JWT_KEY, {
+        expiresIn: 86400 // expires in 24 hours
+      });
+      res.status(200).send({ auth: true, token: token });
     });
 }
 
@@ -81,11 +57,24 @@ exports.updatePassword = (req, res, next) => {
 }
 
 exports.indexUser = (req, res, next) => {
- 
+  User.find({})
+  .select("firstname lastname email")
+    .then(result => {
+      return res.status(200).json({data : result})
+    })
+    .catch(err => {
+      return res.status(404).json({data: err})
+    })
 }
 
 exports.updateUser = (req, res, next) => {
- 
+  User.findOneAndUpdate({id : req.body._id})
+  .then(result => {
+    return res.status(200).json({data : result})
+  })
+  .catch(err => {
+    return res.status(404).json({data : err})
+  })
 }
 
 exports.logout = (req, res, next) => {
