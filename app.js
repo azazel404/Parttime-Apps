@@ -5,10 +5,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors')
 const mongoose = require('mongoose');
 const config = require('./services/connection');
-const passport = require('passport');
-const cookieSession = require('cookie-session');
-const cookie = require("./services/develop");
-require('./services/passport');
+// const passport = require('passport');
+// const cookieSession = require('cookie-session');
+// const cookie = require("./services/develop");
+// require('./services/passport');
 
 
 //import routes
@@ -19,14 +19,8 @@ app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.use(cors())
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(
-    cookieSession({
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        keys: [cookie.cookieKey]
-    })
-);
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 
 mongoose.connect(config.url);

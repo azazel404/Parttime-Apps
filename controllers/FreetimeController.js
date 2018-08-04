@@ -21,7 +21,6 @@ exports.store = (req, res, next) => {
                 });
             }
             const freetimes = new Freetime({
-                _id: new mongoose.Types.ObjectId(),
                 day: req.body.day,
                 timestart: req.body.timestart,
                 timeend: req.body.timeend,

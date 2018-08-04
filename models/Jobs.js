@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 
 const jobSchema = new Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     day: { type: String, required: true },
     employeerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true },
     timestart: { type: String, required: true },

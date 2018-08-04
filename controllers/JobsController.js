@@ -22,7 +22,6 @@ exports.store =  (req, res, next) => {
                 });
             }
             const jobs = new Jobs({
-                _id: new mongoose.Types.ObjectId(),
                 day: req.body.day,
                 timestart: req.body.timestart,
                 timeend: req.body.timeend,
