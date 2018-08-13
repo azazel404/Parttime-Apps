@@ -20,11 +20,11 @@ router.route('/users/update').put(auth,UserController.updateUser)
 router.route('/users/logout').get(UserController.logout)
 
 
-router.route('/freetime').get(auth,FreetimeController.index)
-router.route('/freetime/add').post(auth,FreetimeController.store)
-router.route('/freetime/:parttimerId').get(auth,FreetimeController.show)
-router.route('/freetime/:parttimerId').put(auth,FreetimeController.update)
-router.route('/freetime/:parttimerId').delete(auth,FreetimeController.delete)
+router.route('/freetime').get(FreetimeController.index)
+router.route('/freetime/add').post(FreetimeController.store)
+router.route('/freetime/:parttimerId').get(FreetimeController.show)
+router.route('/freetime/:parttimerId').put(FreetimeController.update)
+router.route('/freetime/:parttimerId').delete(FreetimeController.delete)
 
 router.route('/jobs').get(auth,JobsController.index)
 router.route('/jobs/add').post(auth,JobsController.store)
@@ -32,9 +32,9 @@ router.route('/jobs/:employeerId').get(auth,JobsController.show)
 router.route('/jobs/:employeerId').put(auth,JobsController.update)
 router.route('/jobs/:employeerId').delete(auth,JobsController.delete)
 
-router.route('/hire').get(auth,HiredjobController.test)
-router.route('/jobs/apply/:id').get(auth,HiredjobController.ShowApply)
-router.route('/jobs/apply').post(auth,HiredjobController.AddApplyJob)
+router.route('/hire').get(HiredjobController.test)
+router.route('/jobs/apply/:id').get(HiredjobController.ShowApply)
+router.route('/jobs/apply').post(HiredjobController.AddApplyJob)
 
 
 module.exports = router

@@ -3,10 +3,12 @@ const Schema = mongoose.Schema;
 
 
 const userSchema = new Schema({
-    facebookId: { type: String, required: true },
-    username: { type: String, required: true },
-    picture: { type: String, required: true },
-    email: { type: String, required: true },
+    firstname: { type: String, required: true },
+    lastname: { type: String, required: true },
+    email: {
+        type: String,
+        required: true,
+    },
 
 })
 
